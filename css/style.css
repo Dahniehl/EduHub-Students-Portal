@@ -1,1 +1,316 @@
+body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #5a67d8, #7c3aed);
+    }
 
+/* Login Section */
+    .login-wrapper{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 10px;
+    }
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+        background: white;
+        margin: auto;
+        border-radius: 12px;
+        padding: 25px;
+        overflow: hidden;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+    .card-header {
+        background: linear-gradient(135deg, #1d4ed8, #2563eb);
+        color: white;
+        text-align: center;
+        padding: 25px 20px;
+    }
+    .card-header h2 {
+        margin: 10px 0 5px;
+        font-size: 20px;
+    }
+    .card-header p {
+        margin: 0;
+        font-size: 13px;
+        opacity: 0.8;
+    }
+    .card-body {
+        padding: 20px;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+    input:focus {
+        outline: none;
+        border-color: #2563eb;
+    }
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #1d4ed8, #2563eb);
+        color: white;
+        font-size: 15px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+    .footer-text {
+        text-align: center;
+        font-size: 12px;
+        color: gray;
+        margin-top: 10px;
+    }
+
+/* HEADER */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 30px;
+    background:white;
+    color:#111;
+}
+/* SITE NAME */
+.site-name{
+    font-size:22px;
+    font-weight:bold;
+}
+/* MENU */
+.menu-container{
+    position:relative;
+}
+.menu-icon{
+    font-size:26px;
+    cursor:pointer;
+}
+/* DROPDOWN */
+.dropdown{
+    position:absolute;
+    right:0;
+    top:50px;
+    background:#5a67d8;
+    color:black;
+    width:220px;
+    display:none;
+    flex-direction:column;
+    box-shadow:0 3px 10px rgba(0,0,0,0.2);
+    border-radius:6px;
+    overflow:hidden;
+    z-index: 1000;
+}
+/* when JS toggles class */
+.dropdown.show{
+  display: flex;
+  flex-direction: column;
+}
+/* USER INFO */
+.user-info{
+    padding:15px;
+    background: #ffffff;
+    color: #000000;
+}
+.user-name{
+    margin:0;
+    font-weight:bold;
+}
+.user-email{
+    margin:3px 0 0 0;
+    font-size:14px;
+    color:gray;
+}
+/* LINKS */
+.dropdown a{
+    padding:12px 15px;
+    text-decoration:none;
+    color:black;
+    display:block;
+}
+.dropdown a:hover{
+    background:#f2f2f2;
+}
+/* LOGOUT BUTTON */
+.logout{
+    margin:10px;
+    padding:10px;
+    border:none;
+    background:#ff4d4d;
+    color:white;
+    cursor:pointer;
+    border-radius:4px;
+}
+/* Left Side */
+.header-left{
+  font-size:22px;
+  font-weight: bold;
+  border-right: 1px solid gray;
+  padding-right: 20px;
+}
+.header-right{
+  display: flex;
+  align-items: center;
+}
+#welcomeMessage{
+    font-size:24px;
+    margin:20px;
+    font-weight:bold;
+}
+
+/* CONTENT SECTION */
+.content{
+    display:flex;
+    justify-content:space-between;
+    margin:25px;
+}
+.content-box{
+    flex: 1 1 45%;
+    min-width:250px;
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    margin-right: 20px;
+    text-align: center;
+    transition: 0.3s ease;
+    box-shadow: 0.3s ease;
+}
+.content-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Courses Section */
+.courses {
+    display: flex;
+    flex-direction: column; /* stacked vertically */
+    gap: 25px;              /* space between cards */
+    margin: 25px;
+}
+.course-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: 0.3s ease;
+    box-shadow: 0.3s ease;
+}
+.course-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: #1e88e5;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+}
+
+/* Profile page */
+.profile-container{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+/* Card */
+.profile-card{
+    width: 100%;
+    max-width: 500px;
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.profile-card h2{
+    text-align: center;
+    margin-bottom: 25px;
+}
+/* Form */
+.form-group{
+    margin-bottom: 15px;
+}
+.form-group label{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.form-group input{
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.form-group input[readonly]{
+    background: #f0f2f5;
+}
+/* Button */
+#saveBtn{
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    background: #1a73e8;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+#saveBtn:hover{
+    background: #1558b0;
+}
+
+
+/* Responsive Design */
+/* Mobile first */
+.content{
+    display:flex;
+    flex-direction: column;
+    gap:15px;
+}
+/* Tablets / small desktops */
+@media (min-width:768px){
+    .content{
+        flex-direction:row;
+        flex-wrap:wrap;
+    }
+    .content-box{
+        flex:1 1 45%;
+        min-width:250px;
+    }
+}
+/* Large desktops */
+@media (min-width:1200px){
+    .container{
+        max-width:1200px;
+    }
+    .content-box{
+        padding:30px;
+    }
+    .header h2{
+        font-size:26px;
+    }
+}
