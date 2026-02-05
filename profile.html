@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Profile | EduHub Students Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+
+    <!-- Left Side -->
+    <div class="header-left">
+     <div class="site-name">
+       <h2>EduHub Students Portal</h2>
+     </div>
+    </div>
+    <!-- Right Side -->
+    <div class="header-right">
+    <div class="menu-container">
+        <div class="menu-icon" onclick="toggleMenu()">
+            ⋮
+        </div>
+        <div class="dropdown" id="menuDropdown">
+            <!-- User Info -->
+            <div class="user-info">
+                <p class="user-name" id="userName">Daniel Ukpong</p>
+                <p class="user-email" id="userEmail">daniel@email.com</p>
+            </div>
+            <hr>
+            <!-- Menu Links -->
+            <a href="dashboard.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="profile.html">Profile</a>
+            <a href="settings.html">Settings</a>
+            <button class="logout">Logout</button>
+        </div>
+     </div>
+    </div>
+</header>
+
+<!-- Adding to Profile -->
+<div class="profile-container">
+        <div class="profile-card">
+
+            <h2>My Profile</h2>
+
+            <!-- Full Name -->
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" readonly>
+            </div>
+
+            <!-- Age -->
+            <div class="form-group">
+                <label for="age">Age</label>
+                <input type="number" id="age" placeholder="DD/MM/YYYY">
+            </div>
+
+            <!-- Phone Number -->
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="Enter your phone number">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" readonly>
+            </div>
+
+            <button id="saveBtn">Save</button>
+
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

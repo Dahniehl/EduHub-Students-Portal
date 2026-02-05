@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Dashboard | EduHub Students Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="header">
+
+    <!-- Left Side -->
+    <div class="header-left">
+     <div class="site-name">
+       <h2>EduHub Students Portal</h2>
+     </div>
+    </div>
+    <!-- Right Side -->
+    <div class="header-right">
+    <div class="menu-container">
+        <div class="menu-icon" onclick="toggleMenu()">
+            ⋮
+        </div>
+        <div class="dropdown" id="menuDropdown">
+            <!-- User Info -->
+            <div class="user-info">
+                <p class="user-name" id="userName">Daniel Ukpong</p>
+                <p class="user-email" id="userEmail">daniel@email.com</p>
+            </div>
+            <hr>
+            <!-- Menu Links -->
+            <a href="dashboard.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="profile.html">Profile</a>
+            <a href="settings.html">Settings</a>
+            <button class="logout">Logout</button>
+        </div>
+     </div>
+    </div>
+</header>
+
+<!-- WELCOME MESSAGE -->
+<h2 id="welcomeMessage"></h2>
+
+<!-- CONTENT SECTION -->
+<section class="content">
+    <div class="content-box" id="box1">
+      <h2>Access Quality Study Materials</h2>
+      <p>Download PDFs, Textbooks, Lecture Notes, and Past Questions</p>
+    </div>
+    <div class="content-box" id="box2">
+      <h2>Student Friendly</h2>
+      <p>A simple clear resourceful guide designed specifically for students.Helps with the clear explanations and straightfoward step-by-step help you need to succeed</p>
+    </div>
+</section>
+
+<!-- Courses Section -->
+<section class="courses">
+  <div class="course-list">
+    <div class="course-card">
+      <h3>Faculty of Computing</h3>
+      <a href="" class="btn">Acess the Materials</a>
+    </div>
+  </div>
+    <div class="course-card">
+      <h3>Faculty of Medical Science</h3>
+      <a href="" class="btn">Access the Materials</a>
+    </div>
+</section>
+<script src="script.js"></script>
+</body>
+</html>
