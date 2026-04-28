@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us | EduHub Students Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-left">
+    <div class="site-name">
+      <h2>Edu<span style="color:var(--gold)">Hub</span></h2>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="menu-container">
+      <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+      <div class="dropdown" id="menuDropdown">
+        <div class="user-info">
+          <p class="user-name" id="userName">Loading…</p>
+          <p class="user-email" id="userEmail"></p>
+        </div>
+        <hr>
+        <a href="dashboard.html">🏠 Home</a>
+        <a href="about.html">📖 About</a>
+        <a href="profile.html">👤 Profile</a>
+        <a href="settings.html">⚙️ Settings</a>
+        <button class="logout" onclick="logout()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="page-fade">
+
+  <!-- Hero -->
+  <div class="about-hero">
+    <h2>About EduHub Students Portal</h2>
+    <p>Your trusted hub for quality academic materials, resources, and learning guides — built for students, by students.</p>
+  </div>
+
+  <!-- Cards -->
+  <div class="about-grid">
+    <div class="about-card">
+      <div class="icon">🎯</div>
+      <h2>Our Mission</h2>
+      <p>To help students learn better by providing easy access to quality textbooks, lecture notes, past questions, and exam guides at affordable prices — anytime, anywhere.</p>
+    </div>
+
+    <div class="about-card">
+      <div class="icon">👥</div>
+      <h2>Who Is This For</h2>
+      <p>This platform is designed for students of all institutions, courses, and levels who want reliable academic resources to support and strengthen their studies.</p>
+    </div>
+
+    <div class="about-card">
+      <div class="icon">🔒</div>
+      <h2>Safe &amp; Trusted</h2>
+      <p>All materials are verified and curated for accuracy. Your account and academic data are protected with industry-standard security practices.</p>
+    </div>
+
+    <div class="about-card">
+      <div class="icon">🚀</div>
+      <h2>Always Improving</h2>
+      <p>We continuously add new materials, faculties, and features based on student feedback. Your learning journey drives every update we make.</p>
+    </div>
+  </div>
+
+</main>
+
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

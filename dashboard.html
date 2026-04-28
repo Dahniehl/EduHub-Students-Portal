@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | EduHub Students Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--navy);
+      margin: 2.2rem 0 1.1rem;
+      padding-bottom: .5rem;
+      border-bottom: 2px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px; height: 1.1rem;
+      background: var(--gold);
+      border-radius: 2px;
+    }
+    .courses {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+      gap: 1.3rem;
+    }
+    .course-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 1.6rem 1.8rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: .85rem;
+    }
+    .course-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      border-color: rgba(201,168,76,.3);
+    }
+    .faculty-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      font-size: .72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      color: var(--gold);
+      background: rgba(201,168,76,.1);
+      padding: .28rem .75rem;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .course-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--navy);
+    }
+    .course-card p { font-size: .84rem; color: var(--gray-600); line-height: 1.6; flex: 1; }
+    .access-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .4rem;
+      padding: .65rem 1.2rem;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: var(--white);
+      font-size: .84rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      width: 100%;
+    }
+    .access-btn:hover {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--navy);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(201,168,76,.35);
+    }
+    .content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.3rem;
+      margin-bottom: .5rem;
+    }
+    .content-box {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 1.6rem 1.8rem;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid var(--gray-200);
+      border-top: 3px solid var(--gold);
+      transition: var(--transition);
+    }
+    .content-box:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+    .content-box h2 { font-family: 'Playfair Display', serif; font-size: 1.05rem; color: var(--navy); margin-bottom: .5rem; }
+    .content-box p { font-size: .85rem; color: var(--gray-600); line-height: 1.65; }
+
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(13,27,42,.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; animation: fadeBg .2s ease; }
+    @keyframes fadeBg { from { opacity: 0; } to { opacity: 1; } }
+
+    /* ── FACULTY MODAL — styled to match screenshot ── */
+    .faculty-modal {
+      background: var(--white);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 700px;
+      max-height: 88vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 25px 80px rgba(13,27,42,.35);
+      animation: modalSlide .3s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes modalSlide {
+      from { opacity: 0; transform: translateY(30px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Header dark strip — matches screenshot */
+    .modal-head {
+      background: #1a2a3a;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-shrink: 0;
+    }
+    .modal-head-info { display: flex; flex-direction: column; gap: .5rem; }
+    .modal-head h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+    /* Gold pill tag matching screenshot */
+    .modal-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      background: #e8c55a;
+      color: #3a2800;
+      font-size: .73rem;
+      font-weight: 700;
+      padding: .28rem .85rem;
+      border-radius: 100px;
+      width: fit-content;
+    }
+    .modal-x {
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,.15);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .2s;
+      line-height: 1;
+    }
+    .modal-x:hover { background: rgba(255,255,255,.28); }
+
+    /* Modal scrollable body */
+    .modal-body {
+      overflow-y: auto;
+      flex: 1;
+      padding: 1.5rem;
+    }
+
+    /* Orange-left-border description box — matches screenshot */
+    .modal-desc-box {
+      border-left: 4px solid #f0a030;
+      background: #fafafa;
+      border-radius: 0 8px 8px 0;
+      padding: .95rem 1.1rem;
+      font-size: .9rem;
+      color: #4b5563;
+      line-height: 1.65;
+      margin-bottom: 1.5rem;
+    }
+
+    /* "Available Materials" sub-heading */
+    .avail-heading {
+      display: flex;
+      align-items: center;
+      gap: .45rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #0d1b2a;
+      margin-bottom: 1rem;
+    }
+
+    /* Each material row — white card with bottom border */
+    .mat-row {
+      background: #ffffff;
+      border: 1px solid #e8eaf0;
+      border-radius: 8px;
+      padding: .95rem 1.1rem;
+      margin-bottom: .6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .mat-row:hover {
+      border-color: rgba(201,168,76,.4);
+      box-shadow: 0 2px 12px rgba(13,27,42,.08);
+    }
+    .mat-info { flex: 1; min-width: 0; }
+    .mat-info .mat-name {
+      font-size: .93rem;
+      font-weight: 700;
+      color: #0d1b2a;
+      margin-bottom: .18rem;
+    }
+    .mat-info .mat-type {
+      font-size: .78rem;
+      color: #9aa3b2;
+    }
+
+    /* Blue pill Download button — matches screenshot exactly */
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .38rem;
+      padding: .5rem 1.15rem;
+      background: #2a6496;
+      color: #ffffff;
+      font-size: .82rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all .2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .dl-btn:hover { background: #1d4f75; transform: scale(1.04); }
+    .dl-btn:active { transform: scale(.97); }
+    .dl-btn .dl-icon { font-size: .85rem; }
+
+    /* Modal footer */
+    .modal-foot {
+      border-top: 1px solid #e8eaf0;
+      padding: .9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+      gap: .7rem;
+    }
+    .modal-foot-note { font-size: .79rem; color: #9aa3b2; }
+    .dl-all-btn {
+      padding: .6rem 1.3rem;
+      background: linear-gradient(135deg, #c9a84c, #e8c97a);
+      color: #0d1b2a;
+      font-size: .84rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+    }
+    .dl-all-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(201,168,76,.4); }
+
+    /* Toast pop */
+    .toast-pop {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: #0d1b2a; color: #fff;
+      padding: .85rem 1.2rem; border-radius: 9px;
+      font-size: .87rem; font-weight: 500;
+      box-shadow: 0 20px 60px rgba(13,27,42,.25);
+      z-index: 9999; max-width: 320px;
+      font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: .5rem;
+      animation: toastPop .3s cubic-bezier(.22,1,.36,1);
+      transition: opacity .3s ease, transform .3s ease;
+    }
+    .toast-pop.success { border-left: 4px solid #3cbe8a; }
+    .toast-pop.info    { border-left: 4px solid #c9a84c; }
+    .toast-pop.error   { border-left: 4px solid #e05252; }
+    @keyframes toastPop {
+      from { opacity: 0; transform: translateY(16px) scale(.95); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (max-width: 560px) {
+      .faculty-modal { max-height: 95vh; border-radius: 12px; }
+      .modal-head h2 { font-size: 1.1rem; }
+      .mat-row { flex-direction: column; align-items: flex-start; }
+      .dl-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════════ -->
+<header class="header">
+  <div class="header-left">
+    <div class="site-name">
+      <h2>Edu<span style="color:var(--gold)">Hub</span></h2>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="menu-container">
+      <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+      <div class="dropdown" id="menuDropdown">
+        <div class="user-info">
+          <p class="user-name" id="userName">Loading…</p>
+          <p class="user-email" id="userEmail"></p>
+        </div>
+        <hr>
+        <a href="dashboard.html">🏠 Home</a>
+        <a href="about.html">📖 About</a>
+        <a href="profile.html">👤 Profile</a>
+        <a href="settings.html">⚙️ Settings</a>
+        <button class="logout" onclick="logout()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ MAIN ════════════════════════════════════════════════════ -->
+<main class="page-fade">
+
+  <!-- Welcome Banner -->
+  <div class="welcome-banner">
+    <p style="font-size:.78rem;text-transform:uppercase;letter-spacing:.09em;color:var(--gold);margin-bottom:.4rem;font-weight:700;">Welcome back 👋</p>
+    <h2 id="welcomeMessage">Good to see you!</h2>
+    <p>Access your academic resources, materials, and study guides below.</p>
+  </div>
+
+  <!-- Highlights -->
+  <section class="content">
+    <div class="content-box">
+      <h2>📄 Quality Study Materials</h2>
+      <p>Download PDFs, Textbooks, Lecture Notes, and Past Questions from verified sources — all in one place.</p>
+    </div>
+    <div class="content-box">
+      <h2>🎯 Student-Friendly Design</h2>
+      <p>Clear explanations and step-by-step resources designed to help you succeed in every examination.</p>
+    </div>
+  </section>
+
+  <!-- Faculties -->
+  <h3 class="section-title">Faculties &amp; Departments</h3>
+  <section class="courses">
+
+    <div class="course-card">
+      <span class="faculty-badge">💻 Technology</span>
+      <h3>Faculty of Computing</h3>
+      <p>Programming guides, algorithms, databases, and software engineering notes for all levels.</p>
+      <button class="access-btn" onclick="openModal('computing')">📂 Access Materials →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="faculty-badge">🏥 Health Sciences</span>
+      <h3>Faculty of Medical Science</h3>
+      <p>Anatomy, physiology, pharmacology, clinical notes, and past exam papers.</p>
+      <button class="access-btn" onclick="openModal('medicine')">📂 Access Materials →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="faculty-badge">⚖️ Humanities</span>
+      <h3>Faculty of Law</h3>
+      <p>Case studies, constitutional law, tort law, and legal frameworks for all levels.</p>
+      <button class="access-btn" onclick="openModal('law')">📂 Access Materials →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="faculty-badge">📊 Business</span>
+      <h3>Faculty of Management</h3>
+      <p>Accounting, economics, marketing, and business strategy resources.</p>
+      <button class="access-btn" onclick="openModal('management')">📂 Access Materials →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="faculty-badge">🔧 Engineering</span>
+      <h3>Faculty of Engineering</h3>
+      <p>Mathematics, circuit analysis, thermodynamics, and engineering design resources.</p>
+      <button class="access-btn" onclick="openModal('engineering')">📂 Access Materials →</button>
+    </div>
+
+    <div class="course-card">
+      <span class="faculty-badge">🎨 Humanities</span>
+      <h3>Faculty of Arts &amp; Education</h3>
+      <p>Literature, philosophy, education theory, and research methodology guides.</p>
+      <button class="access-btn" onclick="openModal('arts')">📂 Access Materials →</button>
+    </div>
+
+  </section>
+</main>
+
+<!-- ══ FACULTY MODAL ════════════════════════════════════════════ -->
+<div class="modal-overlay" id="facultyModalOverlay" onclick="handleBgClick(event)">
+  <div class="faculty-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+
+    <!-- Header -->
+    <div class="modal-head">
+      <div class="modal-head-info">
+        <h2 id="modalTitle">Faculty of Computing</h2>
+        <span class="modal-tag" id="modalTag">💻 Technology Materials</span>
+      </div>
+      <button class="modal-x" onclick="closeModal()" aria-label="Close modal">✕</button>
+    </div>
+
+    <!-- Scrollable body -->
+    <div class="modal-body">
+      <div class="modal-desc-box" id="modalDesc">Loading description…</div>
+      <div class="avail-heading">
+        <span>📚</span> Available Materials
+      </div>
+      <div id="matList"></div>
+    </div>
+
+    <!-- Footer -->
+    <div class="modal-foot">
+      <span class="modal-foot-note" id="modalFootNote">All materials are free to download</span>
+      <button class="dl-all-btn" onclick="downloadAll()">⬇️ Download All</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+<script>
+/* ================================================================
+   FACULTY DATA — all materials with proper demo content
+================================================================ */
+const FACULTIES = {
+  computing: {
+    name: 'Faculty of Computing',
+    tag:  '💻 Technology Materials',
+    desc: 'Comprehensive resources for Computer Science, IT, Programming, Data Structures, Algorithms, Software Engineering, Databases, and Web Development.',
+    materials: [
+      { name: 'Introduction to Algorithms (CLRS excerpts)',    type: 'PDF, 12MB'         },
+      { name: 'Python Programming: Beginner to Advanced',      type: 'Lecture Notes'     },
+      { name: 'Database Management Systems – Past Questions',  type: 'Exam Pack'         },
+      { name: 'Software Engineering Design Patterns',          type: 'Slides + Examples' },
+      { name: 'Web Development Bootcamp Resources',            type: 'Handouts'          },
+      { name: 'Data Structures & Algorithms – Full Notes',     type: 'PDF, 8.4MB'        },
+      { name: 'Operating Systems Concepts & Practice',         type: 'Lecture Notes'     },
+      { name: 'Computer Networks – Past Questions 2019–2023',  type: 'Exam Pack'         },
+    ]
+  },
+  medicine: {
+    name: 'Faculty of Medical Science',
+    tag:  '🏥 Health Science Materials',
+    desc: 'Comprehensive medical resources covering Anatomy, Physiology, Pharmacology, Pathology, Clinical Medicine, and MBBS past examination questions.',
+    materials: [
+      { name: 'Anatomy – Upper & Lower Limb Complete Notes',   type: 'PDF, 15MB'         },
+      { name: 'Human Physiology – Systems Overview',           type: 'Lecture Notes'     },
+      { name: 'Pharmacology Drug Reference Guide',             type: 'PDF, 9MB'          },
+      { name: 'MBBS Past Questions 2018–2023',                 type: 'Exam Pack'         },
+      { name: 'Pathology – Core Concepts & Slides',            type: 'Slides + Diagrams' },
+      { name: 'Clinical Skills & Procedures Handbook',         type: 'PDF, 11MB'         },
+    ]
+  },
+  law: {
+    name: 'Faculty of Law',
+    tag:  '⚖️ Legal Study Materials',
+    desc: 'In-depth legal resources covering Constitutional Law, Criminal Law, Law of Contract, Tort, Equity, and comprehensive past examination questions.',
+    materials: [
+      { name: 'Constitutional Law – Key Cases & Principles',   type: 'PDF, 7MB'          },
+      { name: 'Law of Contract – Full Study Guide',            type: 'Lecture Notes'     },
+      { name: 'Criminal Law & Procedure Notes',                type: 'PDF, 5.5MB'        },
+      { name: 'Law of Tort – Past Questions 2019–2023',        type: 'Exam Pack'         },
+      { name: 'Equity & Trust Law Digest',                     type: 'Handouts'          },
+      { name: 'Legal Research & Academic Writing Guide',       type: 'PDF, 4MB'          },
+    ]
+  },
+  management: {
+    name: 'Faculty of Management',
+    tag:  '📊 Business Materials',
+    desc: 'Essential business and management resources covering Accounting, Financial Management, Business Strategy, Marketing, Economics, and past exam questions.',
+    materials: [
+      { name: 'Principles of Accounting – Complete Notes',     type: 'PDF, 10MB'         },
+      { name: 'Financial Management Textbook Excerpts',        type: 'PDF, 8MB'          },
+      { name: 'Business Strategy – Case Studies & Frameworks', type: 'Slides + Examples' },
+      { name: 'Marketing Management Past Questions',           type: 'Exam Pack'         },
+      { name: 'Microeconomics & Macroeconomics Notes',         type: 'Lecture Notes'     },
+      { name: 'Human Resource Management Guide',               type: 'PDF, 6MB'          },
+    ]
+  },
+  engineering: {
+    name: 'Faculty of Engineering',
+    tag:  '🔧 Engineering Materials',
+    desc: 'Technical resources for all engineering disciplines including Mathematics, Circuit Analysis, Thermodynamics, Mechanics, and Engineering Design.',
+    materials: [
+      { name: 'Engineering Mathematics – Calculus & Algebra',  type: 'PDF, 13MB'         },
+      { name: 'Circuit Analysis & Electronics Notes',          type: 'Lecture Notes'     },
+      { name: 'Thermodynamics – Core Principles',              type: 'PDF, 9MB'          },
+      { name: 'Engineering Past Questions 2019–2023',          type: 'Exam Pack'         },
+      { name: 'Engineering Drawing & CAD Fundamentals',        type: 'Slides + Examples' },
+      { name: 'Fluid Mechanics Lecture Notes',                 type: 'PDF, 7.5MB'        },
+    ]
+  },
+  arts: {
+    name: 'Faculty of Arts & Education',
+    tag:  '🎨 Arts & Education Materials',
+    desc: 'Humanities, Education, and Social Science resources covering English Literature, Philosophy, Education Theory, Research Methods, and past questions.',
+    materials: [
+      { name: 'English Literature – Selected Texts & Analysis', type: 'PDF, 8MB'         },
+      { name: 'Philosophy of Mind – Key Readings',              type: 'Lecture Notes'    },
+      { name: 'Education Theory & Classroom Practice',          type: 'PDF, 6MB'         },
+      { name: 'Research Methodology Guide',                     type: 'PDF, 5MB'         },
+      { name: 'Arts & Education Past Questions 2020–2023',      type: 'Exam Pack'        },
+      { name: 'Creative & Academic Essay Writing Guide',        type: 'Handouts'         },
+    ]
+  }
+};
+
+let activeFaculty = null;
+
+/* ── Open modal ─────────────────────────────────────────────── */
+function openModal(key) {
+  const f = FACULTIES[key];
+  if (!f) return;
+  activeFaculty = { key, ...f };
+
+  document.getElementById('modalTitle').textContent   = f.name;
+  document.getElementById('modalTag').textContent     = f.tag;
+  document.getElementById('modalDesc').textContent    = f.desc;
+  document.getElementById('modalFootNote').textContent =
+    `${f.materials.length} materials available · All free to download`;
+
+  // Build material rows
+  const list = document.getElementById('matList');
+  list.innerHTML = '';
+  f.materials.forEach((mat, idx) => {
+    list.innerHTML += `
+      <div class="mat-row">
+        <div class="mat-info">
+          <div class="mat-name">${mat.name}</div>
+          <div class="mat-type">${mat.type}</div>
+        </div>
+        <button class="dl-btn" onclick="downloadItem(${idx})">
+          <span class="dl-icon">⬇️</span> Download
+        </button>
+      </div>`;
+  });
+
+  document.getElementById('facultyModalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+/* ── Close modal ────────────────────────────────────────────── */
+function closeModal() {
+  document.getElementById('facultyModalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function handleBgClick(e) {
+  if (e.target === document.getElementById('facultyModalOverlay')) closeModal();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── Download single item ───────────────────────────────────── */
+function downloadItem(idx) {
+  if (!activeFaculty) return;
+  const mat = activeFaculty.materials[idx];
+  // Save to download history
+  const history = JSON.parse(localStorage.getItem('eduhub_downloads') || '[]');
+  history.unshift({
+    faculty: activeFaculty.name,
+    name: mat.name,
+    type: mat.type,
+    date: new Date().toLocaleString()
+  });
+  localStorage.setItem('eduhub_downloads', JSON.stringify(history.slice(0, 50)));
+  toast(`"${mat.name}" download started!`, 'success');
+}
+
+/* ── Download all ───────────────────────────────────────────── */
+function downloadAll() {
+  if (!activeFaculty) return;
+  toast(`All ${activeFaculty.materials.length} materials from ${activeFaculty.name} queued!`, 'success');
+}
+
+/* ── Toast utility ──────────────────────────────────────────── */
+function toast(msg, type = 'info') {
+  document.querySelector('.toast-pop')?.remove();
+  const el = document.createElement('div');
+  el.className = `toast-pop ${type}`;
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+    setTimeout(() => el.remove(), 320);
+  }, 3200);
+}
+</script>
+</body>
+</html>
