@@ -160,6 +160,34 @@
     .form-group input::placeholder,
     .form-group textarea::placeholder { color: var(--gray-400); }
 
+    /* ── Eye toggle wrapper ── */
+    .pw-wrap {
+      position: relative;
+    }
+    .pw-wrap input {
+      padding-right: 2.8rem !important;
+    }
+    .pw-eye {
+      position: absolute;
+      right: .85rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+      color: var(--gray-400);
+      transition: color .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+    }
+    .pw-eye:hover { color: var(--navy); }
+    .pw-eye svg { pointer-events: none; }
+
     .save-btn {
       display: inline-flex;
       align-items: center;
@@ -675,20 +703,50 @@
             </div>
           </div>
           <div class="s-card-body">
+
+            <!-- Current password -->
             <div class="form-group">
               <label>Current Password</label>
-              <input type="password" id="currentPw" placeholder="Enter your current password">
+              <div class="pw-wrap">
+                <input type="password" id="currentPw" placeholder="Enter your current password">
+                <button type="button" class="pw-eye" onclick="togglePw('currentPw', this)" aria-label="Show password">
+                  <svg id="currentPw-eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+              </div>
             </div>
+
             <div class="form-row">
+              <!-- New password -->
               <div class="form-group">
                 <label>New Password</label>
-                <input type="password" id="newPw" placeholder="Min. 8 characters">
+                <div class="pw-wrap">
+                  <input type="password" id="newPw" placeholder="Min. 8 characters">
+                  <button type="button" class="pw-eye" onclick="togglePw('newPw', this)" aria-label="Show password">
+                    <svg id="newPw-eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
+              <!-- Confirm password -->
               <div class="form-group">
                 <label>Confirm New Password</label>
-                <input type="password" id="confirmPw" placeholder="Repeat new password">
+                <div class="pw-wrap">
+                  <input type="password" id="confirmPw" placeholder="Repeat new password">
+                  <button type="button" class="pw-eye" onclick="togglePw('confirmPw', this)" aria-label="Show password">
+                    <svg id="confirmPw-eye-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
+
             <div style="margin-bottom:1rem;">
               <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:.35rem;">
                 <span style="color:var(--gray-400);">Password strength</span>
@@ -715,7 +773,6 @@
           </div>
           <div class="s-card-body">
             <div class="theme-options">
-
               <div class="theme-option" id="theme-light" onclick="setTheme('light')">
                 <div class="theme-preview light-prev">
                   <div class="theme-preview-bar"></div>
@@ -723,7 +780,6 @@
                 <div class="theme-label">Light</div>
                 <div class="theme-sub">Classic light mode</div>
               </div>
-
               <div class="theme-option" id="theme-dark" onclick="setTheme('dark')">
                 <div class="theme-preview dark-prev">
                   <div class="theme-preview-bar"></div>
@@ -731,7 +787,6 @@
                 <div class="theme-label">Dark</div>
                 <div class="theme-sub">Easy on the eyes</div>
               </div>
-
               <div class="theme-option selected" id="theme-system" onclick="setTheme('system')">
                 <div class="theme-preview system-prev">
                   <div class="theme-preview-bar"></div>
@@ -739,7 +794,6 @@
                 <div class="theme-label">System</div>
                 <div class="theme-sub">Follows your device</div>
               </div>
-
             </div>
             <p style="font-size:.78rem;color:var(--gray-400);margin-top:.2rem;">
               <strong>System</strong> automatically matches your device's light or dark setting.
@@ -800,7 +854,6 @@
           </div>
           <div class="s-card-body">
 
-            <!-- Monthly usage -->
             <div style="margin-bottom:1.6rem;">
               <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.4rem;">
                 <span style="font-weight:600;color:var(--navy)">Monthly Downloads Used</span>
@@ -816,9 +869,7 @@
               </div>
             </div>
 
-            <!-- Plans -->
             <div style="display:flex;flex-direction:column;gap:.8rem;">
-
               <div class="plan-card current" id="planFree">
                 <div class="plan-card-left">
                   <div class="plan-icon free">🎒</div>
@@ -866,12 +917,10 @@
                 </div>
                 <div class="plan-price">₦20,000 <span>/ month</span></div>
               </div>
-
             </div>
           </div>
         </div>
 
-        <!-- Payment history -->
         <div class="s-card">
           <div class="s-card-head">
             <div><h3>🧾 Payment History</h3><p>Your recent transactions on EduHub.</p></div>
@@ -888,7 +937,6 @@
 
       <!-- ══ PRIVACY & DATA PANEL ══ -->
       <div class="settings-panel" id="panel-privacy">
-
         <div class="s-card">
           <div class="s-card-head">
             <div><h3>📋 Data &amp; Privacy</h3><p>Manage, export, or review your personal data.</p></div>
@@ -921,12 +969,10 @@
             </div>
           </div>
         </div>
-
       </div><!-- /privacy -->
 
       <!-- ══ ACTIVE SESSIONS PANEL ══ -->
       <div class="settings-panel" id="panel-sessions">
-
         <div class="s-card">
           <div class="s-card-head">
             <div><h3>📱 Active Sessions</h3><p>Devices currently logged into your EduHub account.</p></div>
@@ -959,18 +1005,15 @@
             </div>
           </div>
         </div>
-
       </div><!-- /sessions -->
 
       <!-- ══ DANGER ZONE PANEL ══ -->
       <div class="settings-panel" id="panel-danger">
-
         <div class="s-card">
           <div class="s-card-head">
             <div><h3>⚠️ Danger Zone</h3><p>These actions are irreversible. Proceed with caution.</p></div>
           </div>
           <div class="s-card-body" style="display:flex;flex-direction:column;gap:1rem;">
-
             <div class="danger-zone">
               <div class="danger-zone-info">
                 <h4>Clear Download History</h4>
@@ -978,7 +1021,6 @@
               </div>
               <button class="danger-btn" onclick="openConfirm('clearHistory')">🗑️ Clear History</button>
             </div>
-
             <div class="danger-zone">
               <div class="danger-zone-info">
                 <h4>Log Out of All Devices</h4>
@@ -986,7 +1028,6 @@
               </div>
               <button class="danger-btn" onclick="openConfirm('logoutAll')">🚪 Logout All</button>
             </div>
-
             <div class="danger-zone" style="border-color:rgba(224,82,82,.6);">
               <div class="danger-zone-info">
                 <h4>Delete My Account</h4>
@@ -994,10 +1035,8 @@
               </div>
               <button class="danger-btn" onclick="openConfirm('deleteAccount')">💣 Delete Account</button>
             </div>
-
           </div>
         </div>
-
       </div><!-- /danger -->
 
     </div><!-- /panelsContainer -->
@@ -1046,6 +1085,27 @@ window.logout = function () {
 };
 
 /* ══════════════════════════════════════════════
+   EYE TOGGLE (shared across all password fields)
+══════════════════════════════════════════════ */
+function togglePw(inputId, btn) {
+  const input   = document.getElementById(inputId);
+  const iconEl  = document.getElementById(inputId + '-eye-icon');
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+
+  iconEl.innerHTML = isHidden
+    ? /* eye-off */
+      `<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+       <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+       <line x1="1" y1="1" x2="23" y2="23"/>`
+    : /* eye */
+      `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+       <circle cx="12" cy="12" r="3"/>`;
+
+  btn.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+}
+
+/* ══════════════════════════════════════════════
    TAB SWITCHING
 ══════════════════════════════════════════════ */
 function switchTab(btn, panelId) {
@@ -1057,7 +1117,7 @@ function switchTab(btn, panelId) {
 }
 
 /* ══════════════════════════════════════════════
-   LOAD & SAVE PROFILE (shared with profile.html)
+   LOAD & SAVE PROFILE
 ══════════════════════════════════════════════ */
 function loadSettingsData() {
   const name    = localStorage.getItem('eduhub_demo_name')  || localStorage.getItem('eduhub_user_name') || '';
@@ -1073,13 +1133,11 @@ function loadSettingsData() {
   const last  = parts.slice(1).join(' ') || '';
   const initials = ((first[0] || '') + (last[0] || '')).toUpperCase() || 'S';
 
-  /* Avatar & name display */
   const av = document.getElementById('avatarInitial');
   if (av) av.textContent = initials;
   const an = document.getElementById('avatarName');
   if (an) an.textContent = name || 'Student';
 
-  /* Inputs */
   safeSet('firstName',      first);
   safeSet('lastName',       last);
   safeSet('settingsEmail',  email);
@@ -1089,13 +1147,11 @@ function loadSettingsData() {
   safeVal('settingsFaculty',faculty);
   safeVal('settingsLevel',  level);
 
-  /* Header dropdown */
   const un = document.getElementById('userName');
   const ue = document.getElementById('userEmail');
   if (un) un.textContent = name  || 'Student';
   if (ue) ue.textContent = email || '';
 
-  /* Download usage (free plan: 7 total) */
   const downloads = JSON.parse(localStorage.getItem('eduhub_downloads') || '[]');
   const used  = downloads.length;
   const total = 7;
@@ -1104,12 +1160,10 @@ function loadSettingsData() {
   if (dlU) dlU.textContent = used + ' / ' + total + ' free';
   if (dlP) dlP.style.width = Math.min((used / total) * 100, 100) + '%';
 
-  /* Breakdown counters (demo values) */
   safeText('usedNotes',     '0');
   safeText('usedTextbooks', '0');
   safeText('usedPastQ',     '0');
 
-  /* Payment history */
   const purchased = JSON.parse(localStorage.getItem('eduhub_purchased') || '{}');
   const keys = Object.keys(purchased);
   const ph = document.getElementById('paymentHistory');
@@ -1127,23 +1181,13 @@ function loadSettingsData() {
     });
   }
 
-  /* Restore theme selection */
   const savedTheme = localStorage.getItem('eduhub_theme') || 'system';
   applyThemeSelection(savedTheme);
 }
 
-function safeSet(id, val) {
-  const el = document.getElementById(id);
-  if (el && val) el.value = val;
-}
-function safeVal(id, val) {
-  const el = document.getElementById(id);
-  if (el && val) el.value = val;
-}
-function safeText(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
+function safeSet(id, val) { const el = document.getElementById(id); if (el && val) el.value = val; }
+function safeVal(id, val) { const el = document.getElementById(id); if (el && val) el.value = val; }
+function safeText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
 
 function saveProfile() {
   const first   = document.getElementById('firstName').value.trim();
@@ -1161,7 +1205,6 @@ function saveProfile() {
   const fullName = (first + ' ' + last).trim();
   const initials = ((first[0] || '') + (last[0] || '')).toUpperCase();
 
-  /* Save to localStorage — shared keys used by profile.html too */
   localStorage.setItem('eduhub_demo_name',  fullName);
   localStorage.setItem('eduhub_demo_email', email);
   localStorage.setItem('eduhub_user_name',  fullName);
@@ -1172,22 +1215,17 @@ function saveProfile() {
   localStorage.setItem('eduhub_faculty',    faculty);
   localStorage.setItem('eduhub_level',      level);
 
-  /* Update avatar & name display */
   const av = document.getElementById('avatarInitial');
   if (av) av.textContent = initials || 'S';
   const an = document.getElementById('avatarName');
   if (an) an.textContent = fullName;
-
   const un = document.getElementById('userName');
   if (un) un.textContent = fullName;
 
   showToast('✅ Profile saved successfully!', 'success');
 }
 
-function resetProfile() {
-  loadSettingsData();
-  showToast('Profile fields reset.', 'info');
-}
+function resetProfile() { loadSettingsData(); showToast('Profile fields reset.', 'info'); }
 
 /* ══════════════════════════════════════════════
    CHANGE PASSWORD
@@ -1210,7 +1248,7 @@ function changePassword() {
   showToast('🔒 Password updated successfully!', 'success');
 }
 
-/* Password strength */
+/* Password strength meter */
 document.addEventListener('DOMContentLoaded', () => {
   const pwInput = document.getElementById('newPw');
   if (!pwInput) return;
@@ -1249,17 +1287,14 @@ document.addEventListener('DOMContentLoaded', () => {
 function setTheme(mode) {
   localStorage.setItem('eduhub_theme', mode);
   applyThemeSelection(mode);
-
   if (mode === 'dark') {
     showToast('🌙 Dark mode coming soon — stay tuned!', 'info');
-    /* Dark mode CSS will be applied in a future update */
   } else if (mode === 'light') {
     showToast('☀️ Light mode active.', 'success');
   } else {
     showToast('🖥️ Using your device\'s system theme.', 'success');
   }
 }
-
 function applyThemeSelection(mode) {
   document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('selected'));
   const el = document.getElementById('theme-' + mode);
@@ -1267,7 +1302,7 @@ function applyThemeSelection(mode) {
 }
 
 /* ══════════════════════════════════════════════
-   SUBSCRIPTION UPGRADE
+   SUBSCRIPTION
 ══════════════════════════════════════════════ */
 function openUpgradeModal(plan) {
   const label = plan === 'pro' ? 'Pro Plan (₦10,000/month)' : 'Premium Plan (₦20,000/month)';
@@ -1287,19 +1322,17 @@ function revokeSession(btn) {
     showToast('Session revoked.', 'success');
   }
 }
-function revokeAll() {
-  openConfirm('revokeAll');
-}
+function revokeAll() { openConfirm('revokeAll'); }
 
 /* ══════════════════════════════════════════════
    CONFIRM MODAL
 ══════════════════════════════════════════════ */
 let pendingAction = null;
 const confirmConfigs = {
-  clearHistory:  { icon:'🗑️', title:'Clear Download History?',      msg:'All your download records will be removed. Your paid content access remains active.',                           btn:'Yes, Clear It' },
-  logoutAll:     { icon:'🚪', title:'Log Out Everywhere?',           msg:'You will be signed out of all devices. You will need to log in again on this device too.',                    btn:'Yes, Log Out All' },
-  deleteAccount: { icon:'💣', title:'Delete Your Account?',          msg:'This will permanently delete your account, all your data, and purchase history. This CANNOT be undone.',      btn:'Yes, Delete Account' },
-  revokeAll:     { icon:'🔐', title:'Revoke All Other Sessions?',    msg:'All sessions except your current one will be signed out immediately.',                                         btn:'Yes, Revoke All' },
+  clearHistory:  { icon:'🗑️', title:'Clear Download History?',   msg:'All your download records will be removed. Your paid content access remains active.',              btn:'Yes, Clear It' },
+  logoutAll:     { icon:'🚪', title:'Log Out Everywhere?',        msg:'You will be signed out of all devices. You will need to log in again on this device too.',         btn:'Yes, Log Out All' },
+  deleteAccount: { icon:'💣', title:'Delete Your Account?',       msg:'This will permanently delete your account, all your data, and purchase history. This CANNOT be undone.', btn:'Yes, Delete Account' },
+  revokeAll:     { icon:'🔐', title:'Revoke All Other Sessions?', msg:'All sessions except your current one will be signed out immediately.',                             btn:'Yes, Revoke All' },
 };
 
 function openConfirm(action) {
