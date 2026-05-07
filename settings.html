@@ -1,11 +1,1357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings | EduHub Students Portal</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | EduHub Students Portal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+
+    main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--navy);
+      margin-bottom: .3rem;
+    }
+    .page-subtitle {
+      font-size: .88rem;
+      color: var(--gray-400);
+      margin-bottom: 2rem;
+    }
+
+    .settings-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 1.8rem;
+      align-items: start;
+    }
+
+    .settings-nav {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: sticky;
+      top: 1.5rem;
+    }
+    .settings-nav-head {
+      background: linear-gradient(135deg, var(--navy), var(--navy-light));
+      padding: 1.1rem 1.3rem;
+      font-size: .75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .09em;
+      color: rgba(255,255,255,.55);
+    }
+    .snav-item {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .8rem 1.3rem;
+      font-size: .875rem;
+      font-weight: 500;
+      color: var(--gray-600);
+      cursor: pointer;
+      border-left: 3px solid transparent;
+      transition: var(--transition);
+      border-bottom: 1px solid var(--gray-200);
+      background: none;
+      width: 100%;
+      text-align: left;
+    }
+    .snav-item:last-child { border-bottom: none; }
+    .snav-item:hover {
+      color: var(--navy);
+      background: var(--gray-100);
+      border-left-color: rgba(201,168,76,.4);
+    }
+    .snav-item.active {
+      color: var(--navy);
+      font-weight: 700;
+      background: rgba(201,168,76,.08);
+      border-left-color: var(--gold);
+    }
+    .snav-item .sni { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+
+    .settings-panel { display: none; }
+    .settings-panel.active { display: flex; flex-direction: column; gap: 1.4rem; }
+
+    .s-card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .s-card-head {
+      padding: 1.2rem 1.6rem;
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .s-card-head h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .s-card-head p {
+      font-size: .79rem;
+      color: var(--gray-400);
+      margin-top: .18rem;
+    }
+    .s-card-body { padding: 1.4rem 1.6rem; }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .form-group { margin-bottom: 1rem; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-group label {
+      display: block;
+      font-size: .74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--gray-600);
+      margin-bottom: .38rem;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: .72rem 1rem;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      font-size: .92rem;
+      color: var(--navy);
+      background: var(--gray-100);
+      font-family: 'DM Sans', sans-serif;
+      transition: var(--transition);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold);
+      background: var(--white);
+      box-shadow: 0 0 0 3px rgba(201,168,76,.12);
+      outline: none;
+    }
+    .form-group input[readonly] {
+      background: var(--gray-200);
+      color: var(--gray-400);
+      cursor: not-allowed;
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+    .form-group select { cursor: pointer; }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--gray-400); }
+
+    .save-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .7rem 1.6rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      color: var(--navy);
+      font-size: .88rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 3px 14px rgba(201,168,76,.35);
+    }
+    .save-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(201,168,76,.45); }
+    .save-btn:active { transform: translateY(0); }
+
+    .danger-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .7rem 1.4rem;
+      background: none;
+      color: var(--danger);
+      font-size: .88rem;
+      font-weight: 700;
+      border: 1.5px solid var(--danger);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .danger-btn:hover { background: var(--danger); color: var(--white); }
+
+    .outline-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      padding: .65rem 1.3rem;
+      background: none;
+      color: var(--navy);
+      font-size: .85rem;
+      font-weight: 600;
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .outline-btn:hover { border-color: var(--navy); background: var(--navy); color: var(--white); }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    /* Toggle switch */
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .95rem 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .toggle-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .toggle-row:first-child { padding-top: 0; }
+    .toggle-info h4 { font-size: .9rem; font-weight: 600; color: var(--navy); }
+    .toggle-info p  { font-size: .79rem; color: var(--gray-400); margin-top: .1rem; }
+    .switch { position: relative; width: 44px; height: 24px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider {
+      position: absolute; inset: 0;
+      background: var(--gray-200);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: .28s;
+    }
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--white);
+      top: 3px; left: 3px;
+      transition: .28s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.18);
+    }
+    input:checked + .slider { background: var(--gold); }
+    input:checked + .slider::before { transform: translateX(20px); }
+
+    /* Avatar section */
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 1.4rem;
+      margin-bottom: 1.4rem;
+      padding-bottom: 1.4rem;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .avatar-circle {
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 700;
+      color: var(--navy);
+      flex-shrink: 0;
+      box-shadow: 0 4px 18px rgba(201,168,76,.38);
+      border: 3px solid rgba(255,255,255,.6);
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+    .avatar-circle:hover { transform: scale(1.05); }
+    .avatar-circle .cam-overlay {
+      position: absolute; inset: 0;
+      border-radius: 50%;
+      background: rgba(13,27,42,.45);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .2s;
+      font-size: 1.2rem;
+    }
+    .avatar-circle:hover .cam-overlay { opacity: 1; }
+    .avatar-info h4 { font-size: .95rem; font-weight: 700; color: var(--navy); margin-bottom: .25rem; }
+    .avatar-info p  { font-size: .8rem; color: var(--gray-400); line-height: 1.5; }
+
+    /* Danger zone */
+    .danger-zone {
+      border: 1.5px solid rgba(224,82,82,.3);
+      border-radius: var(--radius-md);
+      padding: 1.3rem 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .danger-zone-info h4 { font-size: .9rem; font-weight: 700; color: var(--danger); }
+    .danger-zone-info p  { font-size: .8rem; color: var(--gray-400); margin-top: .15rem; }
+
+    /* Badge pill */
+    .badge-pill {
+      display: inline-flex; align-items: center; gap: .3rem;
+      padding: .22rem .65rem;
+      border-radius: 100px;
+      font-size: .71rem; font-weight: 700;
+    }
+    .badge-pill.gold   { background: rgba(201,168,76,.12); color: #a07a20; }
+    .badge-pill.green  { background: rgba(60,190,138,.12); color: #1a7a52; }
+    .badge-pill.gray   { background: var(--gray-200); color: var(--gray-600); }
+    .badge-pill.navy   { background: rgba(13,27,42,.08); color: var(--navy); }
+
+    /* Plan card */
+    .plan-card {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      transition: var(--transition);
+      cursor: pointer;
+      flex-wrap: wrap;
+    }
+    .plan-card:hover { border-color: var(--gold); background: rgba(201,168,76,.03); }
+    .plan-card.current { border-color: var(--gold); background: rgba(201,168,76,.05); }
+    .plan-card-left { display: flex; align-items: flex-start; gap: .9rem; }
+    .plan-icon {
+      width: 42px; height: 42px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0;
+    }
+    .plan-icon.free     { background: var(--gray-200); }
+    .plan-icon.pro      { background: rgba(201,168,76,.15); }
+    .plan-icon.premium  { background: rgba(13,27,42,.08); }
+    .plan-name { font-size: .92rem; font-weight: 700; color: var(--navy); margin-bottom: .15rem; }
+    .plan-desc { font-size: .78rem; color: var(--gray-400); line-height: 1.5; }
+    .plan-allotments {
+      margin-top: .4rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: .3rem;
+    }
+    .plan-allot-tag {
+      font-size: .68rem;
+      font-weight: 600;
+      padding: .15rem .55rem;
+      border-radius: 100px;
+      background: rgba(13,27,42,.06);
+      color: var(--navy);
+    }
+    .plan-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 700; color: var(--navy); text-align: right;
+      white-space: nowrap;
+      margin-top: .1rem;
+    }
+    .plan-price span { font-size: .75rem; font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--gray-400); }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 6px; background: var(--gray-200);
+      border-radius: 100px; overflow: hidden; margin-top: .5rem;
+    }
+    .progress-fill {
+      height: 100%; border-radius: 100px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      transition: width .8s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* Session card */
+    .session-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .9rem 0;
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .session-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .session-icon {
+      width: 38px; height: 38px;
+      border-radius: var(--radius-sm);
+      background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0;
+    }
+    .session-info { flex: 1; }
+    .session-info .si-name { font-size: .88rem; font-weight: 600; color: var(--navy); }
+    .session-info .si-meta { font-size: .76rem; color: var(--gray-400); margin-top: .08rem; }
+    .session-current {
+      font-size: .72rem; font-weight: 700;
+      color: #1a7a52;
+      background: rgba(60,190,138,.12);
+      padding: .2rem .6rem; border-radius: 100px;
+    }
+    .session-revoke {
+      font-size: .78rem; font-weight: 600;
+      color: var(--danger);
+      background: none; border: none; cursor: pointer;
+      transition: opacity .2s;
+    }
+    .session-revoke:hover { opacity: .7; }
+
+    /* Theme selector */
+    .theme-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .75rem;
+      margin-bottom: 1.2rem;
+    }
+    .theme-option {
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-md);
+      padding: 1rem .75rem;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .theme-option:hover { border-color: rgba(201,168,76,.5); }
+    .theme-option.selected {
+      border-color: var(--gold);
+      background: rgba(201,168,76,.06);
+    }
+    .theme-option .theme-preview {
+      width: 100%;
+      height: 44px;
+      border-radius: var(--radius-sm);
+      margin-bottom: .55rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .theme-preview.light-prev { background: #f8f9fb; border: 1px solid #e0e0e0; }
+    .theme-preview.dark-prev  { background: #0d1b2a; }
+    .theme-preview.system-prev {
+      background: linear-gradient(135deg, #f8f9fb 50%, #0d1b2a 50%);
+    }
+    .theme-preview-bar {
+      height: 8px;
+      border-radius: 100px;
+      margin: 6px auto 0;
+    }
+    .light-prev .theme-preview-bar { background: #c9a84c; width: 60%; }
+    .dark-prev  .theme-preview-bar { background: #c9a84c; width: 60%; }
+    .system-prev .theme-preview-bar {
+      background: linear-gradient(90deg, #333 50%, #c9a84c 50%);
+      width: 70%;
+    }
+    .theme-option .theme-label {
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+    .theme-option .theme-sub {
+      font-size: .7rem;
+      color: var(--gray-400);
+      margin-top: .15rem;
+    }
+
+    /* Toast */
+    .toast-pop {
+      position: fixed; bottom: 1.5rem; right: 1.5rem;
+      background: var(--navy); color: var(--white);
+      padding: .85rem 1.2rem; border-radius: 9px;
+      font-size: .87rem; font-weight: 500;
+      box-shadow: var(--shadow-lg); z-index: 9999;
+      max-width: 320px; font-family: 'DM Sans', sans-serif;
+      display: flex; align-items: center; gap: .5rem;
+      animation: toastIn .3s cubic-bezier(.22,1,.36,1);
+    }
+    .toast-pop.success { border-left: 4px solid var(--success); }
+    .toast-pop.error   { border-left: 4px solid var(--danger); }
+    .toast-pop.info    { border-left: 4px solid var(--gold); }
+    @keyframes toastIn {
+      from { opacity:0; transform:translateY(16px) scale(.95); }
+      to   { opacity:1; transform:translateY(0) scale(1); }
+    }
+
+    /* Confirm modal */
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(13,27,42,.65); backdrop-filter: blur(5px);
+      z-index: 1000; align-items: center; justify-content: center; padding: 1rem;
+    }
+    .confirm-overlay.open { display: flex; animation: fadeBg .2s ease; }
+    @keyframes fadeBg { from{opacity:0} to{opacity:1} }
+    .confirm-modal {
+      background: var(--white); border-radius: var(--radius-lg);
+      width: 100%; max-width: 380px; padding: 2rem;
+      text-align: center; box-shadow: var(--shadow-lg);
+      animation: slideUp .3s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes slideUp { from{opacity:0;transform:translateY(22px) scale(.97)} to{opacity:1;transform:translateY(0) scale(1)} }
+    .confirm-modal .cm-icon { font-size: 2.5rem; margin-bottom: .9rem; }
+    .confirm-modal h3 { font-family:'Playfair Display',serif; font-size:1.2rem; color:var(--navy); margin-bottom:.4rem; }
+    .confirm-modal p  { font-size:.85rem; color:var(--gray-400); line-height:1.6; margin-bottom:1.4rem; }
+    .confirm-modal .cm-btns { display:flex; gap:.7rem; justify-content:center; }
+
+    @media (max-width: 760px) {
+      .settings-layout { grid-template-columns: 1fr; }
+      .settings-nav    { position: static; }
+      .form-row        { grid-template-columns: 1fr; }
+      .snav-item       { padding: .7rem 1rem; }
+      .theme-options   { grid-template-columns: 1fr 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .avatar-section { flex-direction: column; text-align: center; }
+      .danger-zone    { flex-direction: column; }
+      .theme-options  { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-    
+
+<header class="header">
+  <div class="header-left">
+    <div class="site-name">
+      <h2>Edu<span style="color:var(--gold)">Hub</span></h2>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="menu-container">
+      <div class="menu-icon" onclick="toggleMenu()">⋮</div>
+      <div class="dropdown" id="menuDropdown">
+        <div class="user-info">
+          <p class="user-name" id="userName">Loading…</p>
+          <p class="user-email" id="userEmail"></p>
+        </div>
+        <hr>
+        <a href="dashboard.html">🏠 Home</a>
+        <a href="about.html">📖 About</a>
+        <a href="profile.html">👤 Profile</a>
+        <a href="settings.html">⚙️ Settings</a>
+        <button class="logout" onclick="logout()">Sign Out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="page-fade">
+
+  <h1 class="page-title">⚙️ Settings</h1>
+  <p class="page-subtitle">Manage your account, preferences, and security options.</p>
+
+  <div class="settings-layout">
+
+    <!-- Left nav -->
+    <nav class="settings-nav">
+      <div class="settings-nav-head">Settings Menu</div>
+      <button class="snav-item active" onclick="switchTab(this,'profile')">
+        <span class="sni">👤</span> Profile
+      </button>
+      <button class="snav-item" onclick="switchTab(this,'account')">
+        <span class="sni">🔐</span> Account &amp; Password
+      </button>
+      <button class="snav-item" onclick="switchTab(this,'appearance')">
+        <span class="sni">🎨</span> Appearance
+      </button>
+      <button class="snav-item" onclick="switchTab(this,'subscription')">
+        <span class="sni">💳</span> Subscription
+      </button>
+      <button class="snav-item" onclick="switchTab(this,'privacy')">
+        <span class="sni">🛡️</span> Privacy &amp; Data
+      </button>
+      <button class="snav-item" onclick="switchTab(this,'sessions')">
+        <span class="sni">📱</span> Active Sessions
+      </button>
+      <button class="snav-item" onclick="switchTab(this,'danger')">
+        <span class="sni">⚠️</span> Danger Zone
+      </button>
+    </nav>
+
+    <div id="panelsContainer">
+
+      <!-- ══ PROFILE PANEL ══ -->
+      <div class="settings-panel active" id="panel-profile">
+        <div class="s-card">
+          <div class="s-card-head">
+            <div>
+              <h3>👤 Personal Information</h3>
+              <p>Update your name, email, and academic details. Changes sync to your profile page.</p>
+            </div>
+          </div>
+          <div class="s-card-body">
+            <div class="avatar-section">
+              <div class="avatar-circle" onclick="showToast('Photo upload coming soon!','info')" title="Change photo">
+                <span id="avatarInitial">S</span>
+                <div class="cam-overlay">📷</div>
+              </div>
+              <div class="avatar-info">
+                <h4 id="avatarName">Student</h4>
+                <p>Click the avatar to change your profile photo.<br>JPG or PNG, max 2MB.</p>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="firstName" placeholder="First name">
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="lastName" placeholder="Last name">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input type="email" id="settingsEmail" placeholder="your@email.com">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phone Number</label>
+                <input type="tel" id="settingsPhone" placeholder="+234 800 000 0000">
+              </div>
+              <div class="form-group">
+                <label>Date of Birth</label>
+                <input type="date" id="settingsDob">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Faculty</label>
+                <select id="settingsFaculty">
+                  <option value="">Select Faculty…</option>
+                  <option>Faculty of Computing</option>
+                  <option>Faculty of Medical Science</option>
+                  <option>Faculty of Law</option>
+                  <option>Faculty of Management</option>
+                  <option>Faculty of Engineering</option>
+                  <option>Faculty of Arts &amp; Education</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Academic Level</label>
+                <select id="settingsLevel">
+                  <option value="">Select Level…</option>
+                  <option>100 Level</option>
+                  <option>200 Level</option>
+                  <option>300 Level</option>
+                  <option>400 Level</option>
+                  <option>500 Level</option>
+                  <option>Postgraduate</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Bio / About You</label>
+              <textarea id="settingsBio" placeholder="A short description about yourself…"></textarea>
+            </div>
+
+            <div class="btn-row">
+              <button class="save-btn" onclick="saveProfile()">💾 Save Changes</button>
+              <button class="outline-btn" onclick="resetProfile()">↺ Reset</button>
+            </div>
+          </div>
+        </div>
+      </div><!-- /profile -->
+
+      <!-- ══ ACCOUNT & PASSWORD PANEL ══ -->
+      <div class="settings-panel" id="panel-account">
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div>
+              <h3>🔑 Change Password</h3>
+              <p>Use a strong password of at least 8 characters.</p>
+            </div>
+          </div>
+          <div class="s-card-body">
+            <div class="form-group">
+              <label>Current Password</label>
+              <input type="password" id="currentPw" placeholder="Enter your current password">
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>New Password</label>
+                <input type="password" id="newPw" placeholder="Min. 8 characters">
+              </div>
+              <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" id="confirmPw" placeholder="Repeat new password">
+              </div>
+            </div>
+            <div style="margin-bottom:1rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.76rem;margin-bottom:.35rem;">
+                <span style="color:var(--gray-400);">Password strength</span>
+                <span id="pwStrengthLabel" style="font-weight:700;color:var(--gray-400);">—</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="pwStrengthBar" style="width:0%;background:var(--gray-300);"></div>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="save-btn" onclick="changePassword()">🔒 Update Password</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /account -->
+
+      <!-- ══ APPEARANCE PANEL ══ -->
+      <div class="settings-panel" id="panel-appearance">
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div><h3>🎨 Theme</h3><p>Choose your preferred colour mode for EduHub.</p></div>
+          </div>
+          <div class="s-card-body">
+            <div class="theme-options">
+
+              <div class="theme-option" id="theme-light" onclick="setTheme('light')">
+                <div class="theme-preview light-prev">
+                  <div class="theme-preview-bar"></div>
+                </div>
+                <div class="theme-label">Light</div>
+                <div class="theme-sub">Classic light mode</div>
+              </div>
+
+              <div class="theme-option" id="theme-dark" onclick="setTheme('dark')">
+                <div class="theme-preview dark-prev">
+                  <div class="theme-preview-bar"></div>
+                </div>
+                <div class="theme-label">Dark</div>
+                <div class="theme-sub">Easy on the eyes</div>
+              </div>
+
+              <div class="theme-option selected" id="theme-system" onclick="setTheme('system')">
+                <div class="theme-preview system-prev">
+                  <div class="theme-preview-bar"></div>
+                </div>
+                <div class="theme-label">System</div>
+                <div class="theme-sub">Follows your device</div>
+              </div>
+
+            </div>
+            <p style="font-size:.78rem;color:var(--gray-400);margin-top:.2rem;">
+              <strong>System</strong> automatically matches your device's light or dark setting.
+            </p>
+          </div>
+        </div>
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div><h3>🌐 Language &amp; Region</h3><p>Set your preferred language and date format.</p></div>
+          </div>
+          <div class="s-card-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Language</label>
+                <select>
+                  <option selected>English (Nigeria)</option>
+                  <option>English (UK)</option>
+                  <option>Hausa</option>
+                  <option>Yoruba</option>
+                  <option>Igbo</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Date Format</label>
+                <select>
+                  <option selected>DD/MM/YYYY</option>
+                  <option>MM/DD/YYYY</option>
+                  <option>YYYY-MM-DD</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Currency Display</label>
+              <select>
+                <option selected>Nigerian Naira (₦)</option>
+                <option>US Dollar ($)</option>
+              </select>
+            </div>
+            <div class="btn-row">
+              <button class="save-btn" onclick="showToast('Display settings saved!','success')">💾 Save Settings</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /appearance -->
+
+      <!-- ══ SUBSCRIPTION PANEL ══ -->
+      <div class="settings-panel" id="panel-subscription">
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div>
+              <h3>💳 Your Current Plan</h3>
+              <p>Manage your EduHub subscription and billing.</p>
+            </div>
+            <span class="badge-pill gold" id="currentPlanBadge">Free Plan</span>
+          </div>
+          <div class="s-card-body">
+
+            <!-- Monthly usage -->
+            <div style="margin-bottom:1.6rem;">
+              <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.4rem;">
+                <span style="font-weight:600;color:var(--navy)">Monthly Downloads Used</span>
+                <span style="color:var(--gray-400)" id="dlUsage">0 / 7 free</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" id="dlProgress" style="width:0%"></div>
+              </div>
+              <div style="display:flex;gap:1rem;margin-top:.7rem;flex-wrap:wrap;">
+                <span style="font-size:.76rem;color:var(--gray-600)">📄 <strong id="usedNotes">0</strong>/3 Lecture Notes/PDFs</span>
+                <span style="font-size:.76rem;color:var(--gray-600)">📚 <strong id="usedTextbooks">0</strong>/2 Textbooks</span>
+                <span style="font-size:.76rem;color:var(--gray-600)">📝 <strong id="usedPastQ">0</strong>/2 Past Questions</span>
+              </div>
+            </div>
+
+            <!-- Plans -->
+            <div style="display:flex;flex-direction:column;gap:.8rem;">
+
+              <div class="plan-card current" id="planFree">
+                <div class="plan-card-left">
+                  <div class="plan-icon free">🎒</div>
+                  <div>
+                    <div class="plan-name">Free Plan <span class="badge-pill green" style="margin-left:.4rem;font-size:.65rem;" id="freeCurrent">Current</span></div>
+                    <div class="plan-desc">7 downloads per month</div>
+                    <div class="plan-allotments">
+                      <span class="plan-allot-tag">📄 3 Lecture Notes/PDFs</span>
+                      <span class="plan-allot-tag">📚 2 Textbooks</span>
+                      <span class="plan-allot-tag">📝 2 Past Questions</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="plan-price">₦0 <span>/ month</span></div>
+              </div>
+
+              <div class="plan-card" id="planPro" onclick="openUpgradeModal('pro')">
+                <div class="plan-card-left">
+                  <div class="plan-icon pro">⭐</div>
+                  <div>
+                    <div class="plan-name">Pro Plan</div>
+                    <div class="plan-desc">15 downloads per month</div>
+                    <div class="plan-allotments">
+                      <span class="plan-allot-tag">📄 7 Lecture Notes/PDFs</span>
+                      <span class="plan-allot-tag">📚 4 Textbooks</span>
+                      <span class="plan-allot-tag">📝 4 Past Questions</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="plan-price">₦10,000 <span>/ month</span></div>
+              </div>
+
+              <div class="plan-card" id="planPremium" onclick="openUpgradeModal('premium')">
+                <div class="plan-card-left">
+                  <div class="plan-icon premium">👑</div>
+                  <div>
+                    <div class="plan-name">Premium Plan</div>
+                    <div class="plan-desc">Unlimited downloads per month</div>
+                    <div class="plan-allotments">
+                      <span class="plan-allot-tag">♾️ Unlimited Lecture Notes/PDFs</span>
+                      <span class="plan-allot-tag">♾️ Unlimited Textbooks</span>
+                      <span class="plan-allot-tag">♾️ Unlimited Past Questions</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="plan-price">₦20,000 <span>/ month</span></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment history -->
+        <div class="s-card">
+          <div class="s-card-head">
+            <div><h3>🧾 Payment History</h3><p>Your recent transactions on EduHub.</p></div>
+          </div>
+          <div class="s-card-body" id="paymentHistory">
+            <div style="text-align:center;padding:2rem;color:var(--gray-400);font-size:.87rem;">
+              <div style="font-size:2rem;margin-bottom:.6rem;">🧾</div>
+              No transactions yet. Your purchase history will appear here.
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /subscription -->
+
+      <!-- ══ PRIVACY & DATA PANEL ══ -->
+      <div class="settings-panel" id="panel-privacy">
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div><h3>📋 Data &amp; Privacy</h3><p>Manage, export, or review your personal data.</p></div>
+          </div>
+          <div class="s-card-body">
+            <div style="display:flex;flex-direction:column;gap:.8rem;">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;">
+                <div>
+                  <div style="font-size:.9rem;font-weight:600;color:var(--navy)">Download My Data</div>
+                  <div style="font-size:.79rem;color:var(--gray-400)">Export your profile, downloads, and purchase history.</div>
+                </div>
+                <button class="outline-btn" onclick="showToast('Data export will be sent to your email shortly.','success')">📥 Export Data</button>
+              </div>
+              <hr style="border:none;border-top:1px solid var(--gray-200)">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;">
+                <div>
+                  <div style="font-size:.9rem;font-weight:600;color:var(--navy)">Privacy Policy</div>
+                  <div style="font-size:.79rem;color:var(--gray-400)">Read how EduHub collects and uses your data.</div>
+                </div>
+                <button class="outline-btn" onclick="showToast('Opening Privacy Policy…','info')">📄 View Policy</button>
+              </div>
+              <hr style="border:none;border-top:1px solid var(--gray-200)">
+              <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;">
+                <div>
+                  <div style="font-size:.9rem;font-weight:600;color:var(--navy)">Terms of Service</div>
+                  <div style="font-size:.79rem;color:var(--gray-400)">Review the terms governing your use of EduHub.</div>
+                </div>
+                <button class="outline-btn" onclick="showToast('Opening Terms of Service…','info')">📄 View Terms</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /privacy -->
+
+      <!-- ══ ACTIVE SESSIONS PANEL ══ -->
+      <div class="settings-panel" id="panel-sessions">
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div><h3>📱 Active Sessions</h3><p>Devices currently logged into your EduHub account.</p></div>
+            <button class="danger-btn" style="font-size:.78rem;padding:.4rem .9rem;" onclick="revokeAll()">Revoke All Others</button>
+          </div>
+          <div class="s-card-body">
+            <div class="session-item">
+              <div class="session-icon">💻</div>
+              <div class="session-info">
+                <div class="si-name">Chrome on Windows — Nigeria</div>
+                <div class="si-meta">127.0.0.1 · Active now</div>
+              </div>
+              <span class="session-current">Current</span>
+            </div>
+            <div class="session-item">
+              <div class="session-icon">📱</div>
+              <div class="session-info">
+                <div class="si-name">Chrome on Android</div>
+                <div class="si-meta">192.168.1.5 · 2 hours ago</div>
+              </div>
+              <button class="session-revoke" onclick="revokeSession(this)">Revoke</button>
+            </div>
+            <div class="session-item">
+              <div class="session-icon">🖥️</div>
+              <div class="session-info">
+                <div class="si-name">Firefox on Windows</div>
+                <div class="si-meta">10.0.0.3 · Yesterday, 4:15 PM</div>
+              </div>
+              <button class="session-revoke" onclick="revokeSession(this)">Revoke</button>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /sessions -->
+
+      <!-- ══ DANGER ZONE PANEL ══ -->
+      <div class="settings-panel" id="panel-danger">
+
+        <div class="s-card">
+          <div class="s-card-head">
+            <div><h3>⚠️ Danger Zone</h3><p>These actions are irreversible. Proceed with caution.</p></div>
+          </div>
+          <div class="s-card-body" style="display:flex;flex-direction:column;gap:1rem;">
+
+            <div class="danger-zone">
+              <div class="danger-zone-info">
+                <h4>Clear Download History</h4>
+                <p>Remove all saved download records from your account. Your paid access remains intact.</p>
+              </div>
+              <button class="danger-btn" onclick="openConfirm('clearHistory')">🗑️ Clear History</button>
+            </div>
+
+            <div class="danger-zone">
+              <div class="danger-zone-info">
+                <h4>Log Out of All Devices</h4>
+                <p>Sign out from every device and browser. You will need to log in again here.</p>
+              </div>
+              <button class="danger-btn" onclick="openConfirm('logoutAll')">🚪 Logout All</button>
+            </div>
+
+            <div class="danger-zone" style="border-color:rgba(224,82,82,.6);">
+              <div class="danger-zone-info">
+                <h4>Delete My Account</h4>
+                <p>Permanently delete your account, all data, and purchase history. This cannot be undone.</p>
+              </div>
+              <button class="danger-btn" onclick="openConfirm('deleteAccount')">💣 Delete Account</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /danger -->
+
+    </div><!-- /panelsContainer -->
+  </div><!-- /settings-layout -->
+</main>
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-overlay" id="confirmOverlay" onclick="handleConfirmBg(event)">
+  <div class="confirm-modal">
+    <div class="cm-icon" id="cmIcon">⚠️</div>
+    <h3 id="cmTitle">Are you sure?</h3>
+    <p id="cmMsg">This action cannot be undone.</p>
+    <div class="cm-btns">
+      <button class="outline-btn" onclick="closeConfirm()">Cancel</button>
+      <button class="danger-btn" id="cmConfirmBtn" onclick="executeConfirm()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── Guard ── */
+if (localStorage.getItem('eduhub_demo_session') !== 'active') {
+  window.location.href = 'index.html';
+}
+
+/* ── Menu toggle ── */
+window.toggleMenu = function () {
+  document.getElementById('menuDropdown').classList.toggle('show');
+};
+document.addEventListener('click', function (e) {
+  const menu = document.getElementById('menuDropdown');
+  const icon = document.querySelector('.menu-icon');
+  if (menu && icon && !menu.contains(e.target) && !icon.contains(e.target)) {
+    menu.classList.remove('show');
+  }
+});
+
+/* ── Logout ── */
+window.logout = function () {
+  if (confirm('Are you sure you want to sign out?')) {
+    localStorage.removeItem('eduhub_demo_session');
+    localStorage.removeItem('eduhub_user_name');
+    localStorage.removeItem('eduhub_user_email');
+    window.location.href = 'index.html';
+  }
+};
+
+/* ══════════════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════════════ */
+function switchTab(btn, panelId) {
+  document.querySelectorAll('.snav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + panelId).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════════════════════
+   LOAD & SAVE PROFILE (shared with profile.html)
+══════════════════════════════════════════════ */
+function loadSettingsData() {
+  const name    = localStorage.getItem('eduhub_demo_name')  || localStorage.getItem('eduhub_user_name') || '';
+  const email   = localStorage.getItem('eduhub_demo_email') || localStorage.getItem('eduhub_user_email') || '';
+  const phone   = localStorage.getItem('eduhub_phone')   || '';
+  const dob     = localStorage.getItem('eduhub_dob')     || '';
+  const bio     = localStorage.getItem('eduhub_bio')     || '';
+  const faculty = localStorage.getItem('eduhub_faculty') || '';
+  const level   = localStorage.getItem('eduhub_level')   || '';
+
+  const parts = name.trim().split(' ');
+  const first = parts[0] || '';
+  const last  = parts.slice(1).join(' ') || '';
+  const initials = ((first[0] || '') + (last[0] || '')).toUpperCase() || 'S';
+
+  /* Avatar & name display */
+  const av = document.getElementById('avatarInitial');
+  if (av) av.textContent = initials;
+  const an = document.getElementById('avatarName');
+  if (an) an.textContent = name || 'Student';
+
+  /* Inputs */
+  safeSet('firstName',      first);
+  safeSet('lastName',       last);
+  safeSet('settingsEmail',  email);
+  safeSet('settingsPhone',  phone);
+  safeSet('settingsDob',    dob);
+  safeSet('settingsBio',    bio);
+  safeVal('settingsFaculty',faculty);
+  safeVal('settingsLevel',  level);
+
+  /* Header dropdown */
+  const un = document.getElementById('userName');
+  const ue = document.getElementById('userEmail');
+  if (un) un.textContent = name  || 'Student';
+  if (ue) ue.textContent = email || '';
+
+  /* Download usage (free plan: 7 total) */
+  const downloads = JSON.parse(localStorage.getItem('eduhub_downloads') || '[]');
+  const used  = downloads.length;
+  const total = 7;
+  const dlU = document.getElementById('dlUsage');
+  const dlP = document.getElementById('dlProgress');
+  if (dlU) dlU.textContent = used + ' / ' + total + ' free';
+  if (dlP) dlP.style.width = Math.min((used / total) * 100, 100) + '%';
+
+  /* Breakdown counters (demo values) */
+  safeText('usedNotes',     '0');
+  safeText('usedTextbooks', '0');
+  safeText('usedPastQ',     '0');
+
+  /* Payment history */
+  const purchased = JSON.parse(localStorage.getItem('eduhub_purchased') || '{}');
+  const keys = Object.keys(purchased);
+  const ph = document.getElementById('paymentHistory');
+  if (ph && keys.length > 0) {
+    ph.innerHTML = '';
+    keys.slice(0, 6).forEach(k => {
+      ph.innerHTML += `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:.7rem 0;border-bottom:1px solid var(--gray-200);font-size:.84rem;">
+          <div>
+            <div style="font-weight:600;color:var(--navy);">Material Purchase</div>
+            <div style="font-size:.76rem;color:var(--gray-400);">${k.replace(/-/g,' · ')}</div>
+          </div>
+          <span class="badge-pill green">✅ Paid</span>
+        </div>`;
+    });
+  }
+
+  /* Restore theme selection */
+  const savedTheme = localStorage.getItem('eduhub_theme') || 'system';
+  applyThemeSelection(savedTheme);
+}
+
+function safeSet(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.value = val;
+}
+function safeVal(id, val) {
+  const el = document.getElementById(id);
+  if (el && val) el.value = val;
+}
+function safeText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function saveProfile() {
+  const first   = document.getElementById('firstName').value.trim();
+  const last    = document.getElementById('lastName').value.trim();
+  const email   = document.getElementById('settingsEmail').value.trim();
+  const phone   = document.getElementById('settingsPhone').value.trim();
+  const dob     = document.getElementById('settingsDob').value;
+  const bio     = document.getElementById('settingsBio').value.trim();
+  const faculty = document.getElementById('settingsFaculty').value;
+  const level   = document.getElementById('settingsLevel').value;
+
+  if (!first) return showToast('Please enter your first name.', 'error');
+  if (!email) return showToast('Please enter a valid email address.', 'error');
+
+  const fullName = (first + ' ' + last).trim();
+  const initials = ((first[0] || '') + (last[0] || '')).toUpperCase();
+
+  /* Save to localStorage — shared keys used by profile.html too */
+  localStorage.setItem('eduhub_demo_name',  fullName);
+  localStorage.setItem('eduhub_demo_email', email);
+  localStorage.setItem('eduhub_user_name',  fullName);
+  localStorage.setItem('eduhub_user_email', email);
+  localStorage.setItem('eduhub_phone',      phone);
+  localStorage.setItem('eduhub_dob',        dob);
+  localStorage.setItem('eduhub_bio',        bio);
+  localStorage.setItem('eduhub_faculty',    faculty);
+  localStorage.setItem('eduhub_level',      level);
+
+  /* Update avatar & name display */
+  const av = document.getElementById('avatarInitial');
+  if (av) av.textContent = initials || 'S';
+  const an = document.getElementById('avatarName');
+  if (an) an.textContent = fullName;
+
+  const un = document.getElementById('userName');
+  if (un) un.textContent = fullName;
+
+  showToast('✅ Profile saved successfully!', 'success');
+}
+
+function resetProfile() {
+  loadSettingsData();
+  showToast('Profile fields reset.', 'info');
+}
+
+/* ══════════════════════════════════════════════
+   CHANGE PASSWORD
+══════════════════════════════════════════════ */
+function changePassword() {
+  const current = document.getElementById('currentPw').value;
+  const newPw   = document.getElementById('newPw').value;
+  const confirm = document.getElementById('confirmPw').value;
+
+  if (!current)          return showToast('Enter your current password.', 'error');
+  if (newPw.length < 8)  return showToast('New password must be at least 8 characters.', 'error');
+  if (newPw !== confirm) return showToast('New passwords do not match.', 'error');
+
+  document.getElementById('currentPw').value = '';
+  document.getElementById('newPw').value     = '';
+  document.getElementById('confirmPw').value = '';
+  document.getElementById('pwStrengthBar').style.width = '0%';
+  document.getElementById('pwStrengthLabel').textContent = '—';
+
+  showToast('🔒 Password updated successfully!', 'success');
+}
+
+/* Password strength */
+document.addEventListener('DOMContentLoaded', () => {
+  const pwInput = document.getElementById('newPw');
+  if (!pwInput) return;
+  pwInput.addEventListener('input', () => {
+    const val = pwInput.value;
+    let score = 0;
+    if (val.length >= 8)           score++;
+    if (val.length >= 12)          score++;
+    if (/[A-Z]/.test(val))         score++;
+    if (/[0-9]/.test(val))         score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const configs = [
+      { w:'0%',   c:'var(--gray-300)', t:'—' },
+      { w:'20%',  c:'#e05252',         t:'Very Weak' },
+      { w:'40%',  c:'#f59e0b',         t:'Weak' },
+      { w:'60%',  c:'#f59e0b',         t:'Fair' },
+      { w:'80%',  c:'#3cbe8a',         t:'Strong' },
+      { w:'100%', c:'#1a7a52',         t:'Very Strong' },
+    ];
+    const cfg = configs[score] || configs[0];
+    const bar   = document.getElementById('pwStrengthBar');
+    const label = document.getElementById('pwStrengthLabel');
+    bar.style.width      = cfg.w;
+    bar.style.background = cfg.c;
+    label.textContent    = cfg.t;
+    label.style.color    = cfg.c;
+  });
+
+  loadSettingsData();
+});
+
+/* ══════════════════════════════════════════════
+   THEME
+══════════════════════════════════════════════ */
+function setTheme(mode) {
+  localStorage.setItem('eduhub_theme', mode);
+  applyThemeSelection(mode);
+
+  if (mode === 'dark') {
+    showToast('🌙 Dark mode coming soon — stay tuned!', 'info');
+    /* Dark mode CSS will be applied in a future update */
+  } else if (mode === 'light') {
+    showToast('☀️ Light mode active.', 'success');
+  } else {
+    showToast('🖥️ Using your device\'s system theme.', 'success');
+  }
+}
+
+function applyThemeSelection(mode) {
+  document.querySelectorAll('.theme-option').forEach(el => el.classList.remove('selected'));
+  const el = document.getElementById('theme-' + mode);
+  if (el) el.classList.add('selected');
+}
+
+/* ══════════════════════════════════════════════
+   SUBSCRIPTION UPGRADE
+══════════════════════════════════════════════ */
+function openUpgradeModal(plan) {
+  const label = plan === 'pro' ? 'Pro Plan (₦10,000/month)' : 'Premium Plan (₦20,000/month)';
+  showToast('🚀 ' + label + ' — coming soon! Stay tuned.', 'info');
+}
+
+/* ══════════════════════════════════════════════
+   SESSIONS
+══════════════════════════════════════════════ */
+function revokeSession(btn) {
+  const row = btn.closest('.session-item');
+  if (row) {
+    row.style.transition = 'opacity .3s ease, transform .3s ease';
+    row.style.opacity    = '0';
+    row.style.transform  = 'translateX(20px)';
+    setTimeout(() => row.remove(), 300);
+    showToast('Session revoked.', 'success');
+  }
+}
+function revokeAll() {
+  openConfirm('revokeAll');
+}
+
+/* ══════════════════════════════════════════════
+   CONFIRM MODAL
+══════════════════════════════════════════════ */
+let pendingAction = null;
+const confirmConfigs = {
+  clearHistory:  { icon:'🗑️', title:'Clear Download History?',      msg:'All your download records will be removed. Your paid content access remains active.',                           btn:'Yes, Clear It' },
+  logoutAll:     { icon:'🚪', title:'Log Out Everywhere?',           msg:'You will be signed out of all devices. You will need to log in again on this device too.',                    btn:'Yes, Log Out All' },
+  deleteAccount: { icon:'💣', title:'Delete Your Account?',          msg:'This will permanently delete your account, all your data, and purchase history. This CANNOT be undone.',      btn:'Yes, Delete Account' },
+  revokeAll:     { icon:'🔐', title:'Revoke All Other Sessions?',    msg:'All sessions except your current one will be signed out immediately.',                                         btn:'Yes, Revoke All' },
+};
+
+function openConfirm(action) {
+  pendingAction = action;
+  const cfg = confirmConfigs[action];
+  if (!cfg) return;
+  document.getElementById('cmIcon').textContent       = cfg.icon;
+  document.getElementById('cmTitle').textContent      = cfg.title;
+  document.getElementById('cmMsg').textContent        = cfg.msg;
+  document.getElementById('cmConfirmBtn').textContent = cfg.btn;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm() {
+  document.getElementById('confirmOverlay').classList.remove('open');
+  pendingAction = null;
+}
+function handleConfirmBg(e) {
+  if (e.target === document.getElementById('confirmOverlay')) closeConfirm();
+}
+function executeConfirm() {
+  closeConfirm();
+  if (pendingAction === 'clearHistory') {
+    localStorage.removeItem('eduhub_downloads');
+    showToast('Download history cleared.', 'success');
+  } else if (pendingAction === 'logoutAll') {
+    logout();
+  } else if (pendingAction === 'deleteAccount') {
+    localStorage.clear();
+    showToast('Account deleted. Goodbye! 👋', 'info');
+    setTimeout(() => window.location.href = 'index.html', 1500);
+  } else if (pendingAction === 'revokeAll') {
+    document.querySelectorAll('.session-revoke').forEach(b => revokeSession(b));
+    showToast('All other sessions revoked.', 'success');
+  }
+}
+
+/* ══════════════════════════════════════════════
+   TOAST
+══════════════════════════════════════════════ */
+function showToast(msg, type) {
+  document.querySelector('.toast-pop')?.remove();
+  const el = document.createElement('div');
+  el.className   = 'toast-pop ' + (type || 'info');
+  el.textContent = msg;
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity .3s ease, transform .3s ease';
+    el.style.opacity    = '0';
+    el.style.transform  = 'translateY(14px)';
+    setTimeout(() => el.remove(), 320);
+  }, 3400);
+}
+</script>
 </body>
 </html>
